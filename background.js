@@ -573,7 +573,7 @@ importScripts("config.js", "lib/util.js", "lib/mime.js", "lib/email-policy.js", 
   // ------------------------------------------------------------------ email
   // Mail goes out only through the Gmail API with the scope gmail.send, using a token Chrome hands over for
   // one request. Nothing about the token is stored or logged by this extension.
-  var sending = {};
+  var sending = new Set();
 
   async function getToken(interactive) {
     if (CFG.FAKE_TOKEN) return CFG.FAKE_TOKEN; // test build only
@@ -601,7 +601,17 @@ importScripts("config.js", "lib/util.js", "lib/mime.js", "lib/email-policy.js", 
   // args: name, trigger ("button" or "auto"), to (address shown on the button), confirmed (AppFolio confirm dialog)
   async function sendBatch(args) {
     var name = args.name;
-    if (sending[name]) return { ok: false, error: "Already sending this batch." };
+    if (sending.has(name)) return { ok: false, error: "Already sending this batch." };
+    sending.add(name);
+    try {
+      return await sendBatchOnce(args);
+    } finally {
+      sending.delete(name);
+    }
+  }
+
+  async function sendBatchOnce(args) {
+    var name = args.name;
     var settings = await getSettings();
     var gate = EP.checkSend({ settings: settings, trigger: args.trigger, to: args.to, confirmed: args.confirmed });
     if (!gate.ok) {
@@ -622,7 +632,6 @@ importScripts("config.js", "lib/util.js", "lib/mime.js", "lib/email-policy.js", 
       await log("warn", "Email not sent: " + m1);
       return { ok: false, error: m1 };
     }
-    sending[name] = true;
     try {
       var rec = await BYTES.get(name);
       if (!rec || !rec.bytes) throw new Error("The PDF bytes for this batch are no longer held (they are kept for 3 days). The PDF is in Downloads/" + CFG.DOWNLOAD_SUBFOLDER + ".");
@@ -669,8 +678,6 @@ importScripts("config.js", "lib/util.js", "lib/mime.js", "lib/email-policy.js", 
       await setEmailState(name, { emailStatus: "failed", emailNote: msg });
       await log("error", "Email failed: " + msg);
       return { ok: false, error: msg };
-    } finally {
-      delete sending[name];
     }
   }
 
