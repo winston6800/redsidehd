@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Redside HD Bill Puller</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <h1>Redside HD Bill Puller</h1>
+  <p class="hint">Log in to Citi first. This never pays, edits, or disputes anything.</p>
+
+  <div class="row">
+    <label for="n">Invoices to request (1 to 100)</label>
+    <input id="n" type="number" min="1" max="100" value="10">
+  </div>
+  <div class="row">
+    <label for="startdate">Start from invoice date</label>
+    <input id="startdate" type="date" value="2026-10-01">
+  </div>
+  <p class="small" id="startmsg">Invoices dated before this are never selected.</p>
+  <div class="row buttons">
+    <button id="run" class="primary" title="Ticks the newest new invoices, requests the Invoice Details PDF, then waits and downloads it">Run</button>
+    <button id="test" title="Does everything up to filling the dialog, then stops before Start Download">Test mode</button>
+    <button id="dry" title="Ticks nothing. Lists the invoice numbers it would select">Dry run</button>
+  </div>
+  <p class="small"><b>Test mode</b> stops before Start Download. <b>Dry run</b> ticks nothing.</p>
+
+  <div id="status" class="status" role="status" aria-live="polite">Idle.</div>
+
+  <h2>Email the batch</h2>
+  <div class="row">
+    <label for="email">Send batch to</label>
+    <input id="email" type="email" placeholder="name@example.com" autocomplete="off" spellcheck="false">
+  </div>
+  <div class="row">
+    <label><input type="checkbox" id="autosend"> Send automatically after download</label>
+  </div>
+  <p class="small" id="emailmsg"></p>
+
+  <h2>Requests waiting or finished</h2>
+  <ul id="pending" class="pending"></ul>
+  <div class="row buttons">
+    <button id="check" title="Look in Requested Invoices now and download anything that is ready">Check now</button>
+    <button id="stop" title="Stop the repeating check">Stop checking</button>
+  </div>
+
+  <h2>Log</h2>
+  <pre id="log" class="log" tabindex="0"></pre>
+  <div class="row buttons">
+    <button id="copy">Copy log</button>
+    <button id="clear">Clear log</button>
+  </div>
+
+  <h2>Sent history</h2>
+  <p class="small" id="ledgercount"></p>
+  <div id="ledgerwrap" class="ledgerwrap"><table id="ledgertable" class="ledger"><thead><tr><th>Invoice</th><th>Amount</th><th>Batch</th><th>Sent to</th><th>Time</th></tr></thead><tbody></tbody></table></div>
+  <div class="row buttons">
+    <button id="exportcsv" title="Save the sent history as a CSV file in Downloads/redside-hd">Export CSV</button>
+    <button id="clearledger" class="danger" title="Forget which invoices were emailed. They become eligible again">Clear sent ledger</button>
+  </div>
+
+  <h2>Request history</h2>
+  <p class="small" id="counts"></p>
+  <div class="row buttons">
+    <button id="reset" class="danger" title="Forget which invoices were requested and downloaded. The sent history is kept">Reset history</button>
+  </div>
+  <script src="config.js"></script>
+  <script src="lib/email-policy.js"></script>
+  <script src="lib/ledger.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

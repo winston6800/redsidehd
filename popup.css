@@ -1,0 +1,33 @@
+body { font: 13px/1.4 system-ui, sans-serif; width: 440px; margin: 10px 12px 14px; color: #1b1b1b; }
+h1 { font-size: 16px; margin: 0 0 4px; }
+h2 { font-size: 13px; margin: 14px 0 4px; }
+.hint, .small { color: #555; margin: 2px 0 6px; }
+.small { font-size: 12px; }
+.row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+.row label { flex: 1; }
+#n { width: 70px; padding: 3px; }
+.buttons button { flex: 1; padding: 6px 4px; cursor: pointer; }
+button.primary { background: #0b57d0; color: #fff; border: 1px solid #0b57d0; border-radius: 4px; }
+button.danger { color: #8c1d18; }
+button:disabled { opacity: 0.5; cursor: default; }
+.status { padding: 6px 8px; background: #f1f3f4; border-radius: 4px; min-height: 18px; }
+.status.error { background: #fce8e6; }
+.status.ok { background: #e6f4ea; }
+.pending { list-style: none; padding: 0; margin: 4px 0; }
+.pending li { padding: 4px 6px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 4px; font-size: 12px; word-break: break-all; }
+.pending li .note { color: #8c1d18; }
+.pending button { font-size: 11px; margin-left: 6px; }
+.log { height: 170px; overflow: auto; background: #111; color: #ddd; padding: 6px; font: 11px/1.35 ui-monospace, monospace; white-space: pre-wrap; margin: 4px 0; }
+.log .error, .log .guard { color: #ff8a80; }
+.log .warn { color: #ffd180; }
+.log .ok { color: #a5d6a7; }
+.log .click { color: #90caf9; }
+#email { width: 230px; padding: 3px; }
+#email.bad { outline: 2px solid #b00020; }
+.emailrow { margin-top: 4px; }
+.emailrow .ok { color: #0a6; }
+.emailrow .bad { color: #8c1d18; }
+.ledgerwrap { max-height: 160px; overflow: auto; border: 1px solid #ccc; margin: 4px 0; }
+table.ledger { border-collapse: collapse; width: 100%; font-size: 11px; }
+table.ledger th, table.ledger td { border-bottom: 1px solid #eee; padding: 2px 4px; text-align: left; word-break: break-all; }
+table.ledger th { position: sticky; top: 0; background: #f4f4f4; }

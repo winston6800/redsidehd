@@ -1,0 +1,61 @@
+{
+  "manifest_version": 3,
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsHCVuSAKZ3nVYpxyFFAm/COt7dHpJ1kIw3D76gakGkAgc0EPdRrlmFSmMqva4eARbIbL8jptu1kg1VZn7DZduKriEScgCEayQsqLKpLrHdoQDyQgiIefZEc30buAuNVPHlwzCGmDXuXvNyPZA8LajzcEn0QDQsqNtE9OCIJNNsiWHioCAhM2UZbZg1dffHvS1wWUWUlTIbvfl9/mz/pY+CRGUvHsKW4/z8YTCcLQyTp3YGxe+A5KMg/GnYbsRLGFL4xqZMDnYgeVXzhGr5QSnxdGBzly0SehWHKuzyZEEeeYyrlHaQNl1lTvZGnyffKUM+zjDy75+u3+mXOC05jfnQIDAQAB",
+  "name": "Redside HD Bill Puller",
+  "version": "0.2.0",
+  "description": "Requests Home Depot Invoice Details PDFs from the Citi commercial portal after you log in, and can email the batch from your own Gmail account when you press a button. Never pays, edits, or disputes anything.",
+  "minimum_chrome_version": "110",
+  "permissions": [
+    "storage",
+    "downloads",
+    "alarms",
+    "scripting",
+    "identity"
+  ],
+  "host_permissions": [
+    "https://www.retailservicescommercial.citi.com/*",
+    "https://gmail.googleapis.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Redside HD Bill Puller",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.retailservicescommercial.citi.com/*"
+      ],
+      "js": [
+        "config.js",
+        "lib/mime.js",
+        "content/guard.js",
+        "content/portal.js",
+        "content/main.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src https://gmail.googleapis.com"
+  },
+  "oauth2": {
+    "client_id": "REPLACE_WITH_YOUR_CLIENT_ID.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/gmail.send"
+    ]
+  }
+}
